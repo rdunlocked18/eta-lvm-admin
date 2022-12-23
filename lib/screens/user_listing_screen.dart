@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'add_mt_details.dart';
 import 'admin_dashboard/admin_all_users_model/admin_all_users_model.dart';
 
@@ -25,10 +26,9 @@ class _UserListingScreenState extends State<UserListingScreen> {
 
   apiData() async {
     isLoading = true;
-    var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkaXRpMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MDM0MTY4OH0.BjE1w14UkKa8fjkq7cf5rxd1P9lQUqEXi4qnmSuDj1w'
-    };
+    final prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? "NULL";
+    var headers = {'Authorization': token};
     var request = http.Request(
         'GET',
         Uri.parse(

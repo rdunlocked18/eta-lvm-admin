@@ -34,12 +34,12 @@ class _AddUserMtDetailsState extends State<AddUserMtDetails> {
     setState(() {});
 
     final prefs = await SharedPreferences.getInstance();
-    print('${prefs.getString('token')}');
 
+    String token = prefs.getString('token') ?? "NULL";
     var headers = {
       // 'Content-Type': 'application/json',
       'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkaXRpMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MDM0MTY4OH0.BjE1w14UkKa8fjkq7cf5rxd1P9lQUqEXi4qnmSuDj1w'
+          token
     };
     var request = http.Request(
         'POST',

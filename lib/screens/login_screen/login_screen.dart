@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:locked_wallet/common_widget/state_info.dart';
-import 'package:locked_wallet/main.dart';
 import 'package:locked_wallet/screens/signup_screen/signup_screen.dart';
 import 'package:locked_wallet/screens/user_dashboard/user_dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';

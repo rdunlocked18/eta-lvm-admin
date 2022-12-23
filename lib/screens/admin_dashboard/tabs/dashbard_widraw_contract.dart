@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:locked_wallet/screens/admin_dashboard/admin_all_users_model/admin_all_users_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../common_widget/reusable_tableRow.dart';
@@ -25,6 +26,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   List<String> items = ["All User", "Ramazan", "Latif Ullah", "Asad"];
   String _initialValue = "All User";
   bool allUsers = true;
+  String token = getToken().toString();
 
   var message = [];
   var sync = [];
@@ -37,10 +39,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   }
 
   GetAllUsers() async {
-    var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkaXRpMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MDM0MTY4OH0.BjE1w14UkKa8fjkq7cf5rxd1P9lQUqEXi4qnmSuDj1w'
-    };
+    var headers = {'Authorization': token};
     var request = http.Request(
         'GET', Uri.parse('http://3.109.216.76:30111/api/admin/getallusers'));
 
@@ -74,10 +73,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   }
 
   syncDash() async {
-    var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0'
-    };
+    var headers = {'Authorization': token};
     var request = http.Request(
         'GET', Uri.parse('http://3.109.216.76:30111/api/user/getdashboard'));
     request.body = '''''';
@@ -99,8 +95,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   var data = [];
   getData() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkaXRpMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MDM0MTY4OH0.BjE1w14UkKa8fjkq7cf5rxd1P9lQUqEXi4qnmSuDj1w',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3AmBcOuoyugB54QXZqpWGQQbK88si9NELb.HBHNqX4GA599IDUwztdjItc%2B6yrnEzELzfKGnwRfu8Q'
     };
@@ -593,6 +588,12 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
         // ReusableTableRow(fourthList),
       ],
     );
+  }
+
+  static Future<String> getToken() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    var token = mainPref.getString("token");
+    return token.toString();
   }
 }
 

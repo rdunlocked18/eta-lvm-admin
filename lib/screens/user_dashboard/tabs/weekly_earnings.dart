@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,6 +13,7 @@ class WeeklyEarning extends StatefulWidget {
 }
 
 class _WeeklyEarningState extends State<WeeklyEarning> {
+  String token = getToken();
   void initState() {
     super.initState();
     firstWeek();
@@ -22,8 +24,7 @@ class _WeeklyEarningState extends State<WeeklyEarning> {
 
   firstWeek() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3Akl5SvZTkz-3fQwmXsKewBlW05RKa_LjV.DHFs1ZvHP%2FbrrPgXXmCBrZotBftv9%2FU%2FFvo%2FRYTvVTo'
     };
@@ -51,8 +52,7 @@ class _WeeklyEarningState extends State<WeeklyEarning> {
 
   secondWeek() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3ABr9bRA-jt_G2RaOu2kIF14zAVXsF4kI0.gkCq6rVfjMANN9wrOKV%2B4iyjVhJySyaPbLOny%2BUc1ho'
     };
@@ -79,8 +79,7 @@ class _WeeklyEarningState extends State<WeeklyEarning> {
 
   thirdWeek() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3AlxqO18RM7HECRsgUIUqgu23iekFEEqiO.6E5DfAlK5FKeurbUhr9gaaTYYXGPqxW3Ia37LvBhiyQ'
     };
@@ -107,8 +106,7 @@ class _WeeklyEarningState extends State<WeeklyEarning> {
 
   forthWeek() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3AJCBdeDSx-j5UTyYDpomwth0PbJU4gAEl.F2TxguT1j81Dy42TKBqGNnidjpSXmHFK6OQ76e1M%2FGU'
     };
@@ -233,6 +231,12 @@ class _WeeklyEarningState extends State<WeeklyEarning> {
                   ],
                 );
         });
+  }
+
+  static getToken() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    var token = mainPref.getString("token");
+    return token;
   }
 }
 
