@@ -26,11 +26,11 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   List<String> items = ["All User", "Ramazan", "Latif Ullah", "Asad"];
   String _initialValue = "All User";
   bool allUsers = true;
-  String token = getToken().toString();
+  //String token = getToken();
 
   var message = [];
   var sync = [];
-  List<UserModel> list = [];
+  List<SingleUserData> list = [];
   UserModel? select;
   void initState() {
     super.initState();
@@ -39,9 +39,16 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   }
 
   GetAllUsers() async {
-    var headers = {'Authorization': token};
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    var token = mainPref.getString("token");
+
+    var headers = {
+      'Authorization': token ?? '',
+    };
     var request = http.Request(
-        'GET', Uri.parse('http://3.109.216.76:30111/api/admin/getallusers'));
+        'GET',
+        Uri.parse(
+            'http://api.lockedvaultenterprises.com/api/admin/getallusers'));
 
     request.headers.addAll(headers);
 
@@ -50,10 +57,11 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
     if (response.statusCode == 200) {
       // print(await response.stream.bytesToString());
       var res = await response.stream.bytesToString();
+
       var body = jsonDecode(res);
       message = body['data'];
       for (int i = 0; i < message.length; i++) {
-        UserModel getList = UserModel.fromJson(message[i]);
+        SingleUserData getList = SingleUserData.fromJson(message[i]);
         list.add(getList);
         setState(() {});
       }
@@ -73,10 +81,16 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   }
 
   syncDash() async {
-    var headers = {'Authorization': token};
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    var token = mainPref.getString("token");
+    var headers = {
+      'Authorization': token ?? '',
+    };
     var request = http.Request(
-        'GET', Uri.parse('http://3.109.216.76:30111/api/user/getdashboard'));
-    request.body = '''''';
+        'GET',
+        Uri.parse(
+            'http://api.lockedvaultenterprises.com/api/user/getdashboard'));
+
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -93,11 +107,15 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   }
 
   var data = [];
+  bool isLoading = false;
   getData() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    var token = mainPref.getString("token");
+    isLoading = true;
+    setState(() {});
+    print(token);
     var headers = {
-      'Authorization': token,
-      'Cookie':
-          'connect.sid=s%3AmBcOuoyugB54QXZqpWGQQbK88si9NELb.HBHNqX4GA599IDUwztdjItc%2B6yrnEzELzfKGnwRfu8Q'
+      'Authorization': token ?? '',
     };
     var request = http.Request(
         'GET',
@@ -112,9 +130,11 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
       var res = await response.stream.bytesToString();
       var body = jsonDecode(res);
       data = body['data'];
+      isLoading = false;
       setState(() {});
       print(data);
     } else {
+      isLoading = false;
       print(response.reasonPhrase);
     }
   }
@@ -125,133 +145,135 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
       child: Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
                 height: 50,
                 width: 50,
                 child: Image.asset(
                   "assets/hersheybar381.png",
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               ),
-              SizedBox(
-                width: 40,
-              ),
-              //DropDownButton
-              InkWell(
-                onTap: () async {
-                  await showDialog(
-                      context: context,
-                      builder: (_) {
-                        return StatefulBuilder(
-                          builder: (BuildContext context,
-                              void Function(void Function()) setState) {
-                            return Dialog(
-                              backgroundColor: Colors.grey.shade200,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  children: [
-                                    ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: ScrollPhysics(),
-                                        itemCount: message.length,
-                                        itemBuilder: (context, index) {
-                                          return Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(list[index]
-                                                        .username
-                                                        .toString()),
-                                                  ),
-                                                  Checkbox(
-                                                    focusColor:
-                                                        const Color(0xFFFFC000),
-                                                    checkColor: Colors.black,
-                                                    activeColor:
-                                                        const Color(0xFFFFC000),
-                                                    value:
-                                                        list[index].isSelected!,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        list[index].isSelected =
-                                                            !list[index]
-                                                                .isSelected!;
 
-                                                        setState(() {});
-                                                      });
-                                                    },
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          );
-                                        }),
-                                    Spacer(),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        width: 120,
-                                        height: 60,
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFF0C331F),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Text(
-                                          "Submit",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      });
-                  setState(() {});
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 30,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Color(0xFF0C331F),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    children: [
-                      Text(
-                        _initialValue,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 50,
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              //DropDownButton
+              // InkWell(
+              //   onTap: () async {
+              //     await showDialog(
+              //         context: context,
+              //         builder: (_) {
+              //           return StatefulBuilder(
+              //             builder: (BuildContext context,
+              //                 void Function(void Function()) setState) {
+              //               return Dialog(
+              //                 backgroundColor: Colors.grey.shade200,
+              //                 shape: RoundedRectangleBorder(
+              //                   borderRadius: BorderRadius.circular(20),
+              //                 ),
+              //                 child: Padding(
+              //                   padding: const EdgeInsets.all(20.0),
+              //                   child: Column(
+              //                     children: [
+              //                       ListView.builder(
+              //                           shrinkWrap: true,
+              //                           physics: ScrollPhysics(),
+              //                           itemCount: list.length,
+              //                           itemBuilder: (context, index) {
+              //                             print(
+              //                                 list[index].username.toString());
+              //                             return Column(
+              //                               children: [
+              //                                 Row(
+              //                                   children: [
+              //                                     Expanded(
+              //                                       child: Text(list[index]
+              //                                           .username
+              //                                           .toString()),
+              //                                     ),
+              //                                     // Checkbox(
+              //                                     //   focusColor:
+              //                                     //       const Color(0xFFFFC000),
+              //                                     //   checkColor: Colors.black,
+              //                                     //   activeColor:
+              //                                     //       const Color(0xFFFFC000),
+              //                                     //   value:
+              //                                     //       list[index].isSelected!,
+              //                                     //   onChanged: (value) {
+              //                                     //     setState(() {
+              //                                     //       list[index].isSelected =
+              //                                     //           !list[index]
+              //                                     //               .isSelected!;
+
+              //                                     //       setState(() {});
+              //                                     //     });
+              //                                     //   },
+              //                                     // ),
+              //                                   ],
+              //                                 )
+              //                               ],
+              //                             );
+              //                           }),
+              //                       Spacer(),
+              //                       InkWell(
+              //                         onTap: () {
+              //                           Navigator.pop(context);
+              //                         },
+              //                         child: Container(
+              //                           padding: EdgeInsets.symmetric(
+              //                               horizontal: 10),
+              //                           width: 120,
+              //                           height: 60,
+              //                           alignment: Alignment.center,
+              //                           decoration: BoxDecoration(
+              //                               color: Color(0xFF0C331F),
+              //                               borderRadius:
+              //                                   BorderRadius.circular(10)),
+              //                           child: Text(
+              //                             "Submit",
+              //                             style: TextStyle(
+              //                               fontSize: 16,
+              //                               color: Colors.white,
+              //                             ),
+              //                           ),
+              //                         ),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               );
+              //             },
+              //           );
+              //         });
+              //     setState(() {});
+              //   },
+              //   child: Container(
+              //     padding: EdgeInsets.symmetric(horizontal: 10),
+              //     height: 30,
+              //     alignment: Alignment.center,
+              //     decoration: BoxDecoration(
+              //         color: Color(0xFF0C331F),
+              //         borderRadius: BorderRadius.circular(10)),
+              //     child: Row(
+              //       children: [
+              //         Text(
+              //           _initialValue,
+              //           style: TextStyle(
+              //             fontSize: 16,
+              //             color: Colors.white,
+              //           ),
+              //         ),
+              //         SizedBox(
+              //           width: 50,
+              //         ),
+              //         Icon(
+              //           Icons.keyboard_arrow_down,
+              //           color: Colors.white,
+              //         )
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Spacer(),
               InkWell(
                 onTap: () {
@@ -264,8 +286,16 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                     ),
                   );
                 },
-                child: Icon(
-                  Icons.person,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text("All Users")
+                  ],
                 ),
               ),
               Spacer(),
@@ -317,10 +347,6 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                         ProfitLoss('14', 400),
                         ProfitLoss('15', -190),
                         ProfitLoss('16', 600),
-                        ProfitLoss('17', -111),
-                        ProfitLoss('18', 320),
-                        ProfitLoss('19', -240),
-                        ProfitLoss('20', 440),
                       ],
                       xValueMapper: (ProfitLoss sales, _) => sales.day,
                       yValueMapper: (ProfitLoss sales, _) => sales.profit,
@@ -523,24 +549,29 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                 //  print(date);
                 return GestureDetector(
                   onTap: () {
-                    print(list[index].createDate.toString());
+                    print(list[index].createdAt.toString());
                   },
-                  child: Column(
-                    children: [
-                      CustomTable(
-                        // heading: ['Trades', 'P/Ps', 'Time'],
-                        firstList: [
-                          data[index]['username'].toString(),
-                          data[index]['totalProfit'].toString(),
-                          // data[index]['totalProfit'].toString(),
-                          getvalidDate(data[index]['createdAt'].toString())
-                        ],
-                        // secondList: ['Jpy/USD', '40', '74'],
-                        // thirdList: ['BTC/USD', '71', '17'],
-                        // fourthList: ['XUA/USD', '67', '11']
-                      ),
-                    ],
-                  ),
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Column(
+                          children: [
+                            CustomTable(
+                              heading: ['Account Name', 'P/Ps', 'Time'],
+                              firstList: [
+                                data[index]['username'].toString(),
+                                data[index]['totalProfit'].toString(),
+                                // data[index]['totalProfit'].toString(),
+                                getvalidDate(
+                                    data[index]['createdAt'].toString())
+                              ],
+                              // secondList: ['Jpy/USD', '40', '74'],
+                              // thirdList: ['BTC/USD', '71', '17'],
+                              // fourthList: ['XUA/USD', '67', '11']
+                            ),
+                          ],
+                        ),
                 );
                 //   Column(children: [
                 //   Row(
@@ -567,7 +598,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   }
 
   Table CustomTable({
-    // required List<String> heading,
+    required List<String> heading,
     required List<String> firstList,
     // required List<String> secondList,
     // required List<String> thirdList,
@@ -593,7 +624,8 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   static Future<String> getToken() async {
     SharedPreferences mainPref = await SharedPreferences.getInstance();
     var token = mainPref.getString("token");
-    return token.toString();
+    print(token);
+    return token ?? '';
   }
 }
 

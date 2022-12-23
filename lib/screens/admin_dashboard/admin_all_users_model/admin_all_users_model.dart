@@ -37,9 +37,10 @@ class SingleUserData {
   final String? email;
   final String? address;
   final String? phone;
-  final dynamic accountId;
+  final String? accountId;
   final String? createdAt;
   final String? updatedAt;
+  final Metatrader? metatrader;
 
   SingleUserData({
     this.id,
@@ -50,6 +51,7 @@ class SingleUserData {
     this.accountId,
     this.createdAt,
     this.updatedAt,
+    this.metatrader,
   });
 
   SingleUserData copyWith({
@@ -58,9 +60,10 @@ class SingleUserData {
     String? email,
     String? address,
     String? phone,
-    dynamic accountId,
+    String? accountId,
     String? createdAt,
     String? updatedAt,
+    Metatrader? metatrader,
   }) {
     return SingleUserData(
       id: id ?? this.id,
@@ -71,6 +74,7 @@ class SingleUserData {
       accountId: accountId ?? this.accountId,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      metatrader: metatrader ?? this.metatrader,
     );
   }
 
@@ -80,9 +84,12 @@ class SingleUserData {
         email = json['email'] as String?,
         address = json['address'] as String?,
         phone = json['phone'] as String?,
-        accountId = json['accountId'],
+        accountId = json['accountId'] as String?,
         createdAt = json['createdAt'] as String?,
-        updatedAt = json['updatedAt'] as String?;
+        updatedAt = json['updatedAt'] as String?,
+        metatrader = (json['metatrader'] as Map<String, dynamic>?) != null
+            ? Metatrader.fromJson(json['metatrader'] as Map<String, dynamic>)
+            : null;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -91,6 +98,66 @@ class SingleUserData {
         'address': address,
         'phone': phone,
         'accountId': accountId,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        'metatrader': metatrader?.toJson()
+      };
+}
+
+class Metatrader {
+  final int? id;
+  final int? userId;
+  final String? serverId;
+  final String? serverPassword;
+  final String? serverName;
+  final String? createdAt;
+  final String? updatedAt;
+
+  Metatrader({
+    this.id,
+    this.userId,
+    this.serverId,
+    this.serverPassword,
+    this.serverName,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  Metatrader copyWith({
+    int? id,
+    int? userId,
+    String? serverId,
+    String? serverPassword,
+    String? serverName,
+    String? createdAt,
+    String? updatedAt,
+  }) {
+    return Metatrader(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      serverId: serverId ?? this.serverId,
+      serverPassword: serverPassword ?? this.serverPassword,
+      serverName: serverName ?? this.serverName,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  Metatrader.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int?,
+        userId = json['userId'] as int?,
+        serverId = json['serverId'] as String?,
+        serverPassword = json['serverPassword'] as String?,
+        serverName = json['serverName'] as String?,
+        createdAt = json['createdAt'] as String?,
+        updatedAt = json['updatedAt'] as String?;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'userId': userId,
+        'serverId': serverId,
+        'serverPassword': serverPassword,
+        'serverName': serverName,
         'createdAt': createdAt,
         'updatedAt': updatedAt
       };

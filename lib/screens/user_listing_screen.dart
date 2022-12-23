@@ -110,6 +110,13 @@ class _UserListingScreenState extends State<UserListingScreen> {
                                 ),
                           ),
                           child: ListTile(
+                            leading: singleUser.metatrader?.id == null
+                                ? Icon(
+                                    Icons.close,
+                                  )
+                                : Icon(
+                                    Icons.verified,
+                                  ),
                             title: Text("${singleUser.username}"),
                             subtitle: Text("Created At : ${date}"),
                             horizontalTitleGap: 2,
