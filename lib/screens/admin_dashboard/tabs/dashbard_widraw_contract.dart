@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:locked_wallet/screens/admin_dashboard/admin_all_users_model/admin_all_users_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -10,6 +11,7 @@ import '../../../common_widget/reusable_tableRow.dart';
 import 'package:http/http.dart' as http;
 
 import '../../user_dashboard/user_dashboard.dart';
+import '../../user_listing_screen.dart';
 
 class DashBoardWithDrawContract extends StatefulWidget {
   const DashBoardWithDrawContract({Key? key}) : super(key: key);
@@ -59,6 +61,16 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
     } else {
       print(response.reasonPhrase);
     }
+  }
+
+  String getvalidDate(String dd) {
+    var f = DateFormat('dd - MMM - yyyy');
+    var date = f.format(
+      DateTime.parse(dd),
+    );
+    print(date);
+
+    return date;
   }
 
   syncDash() async {
@@ -243,6 +255,22 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                       )
                     ],
                   ),
+                ),
+              ),
+              Spacer(),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) {
+                        return UserListingScreen();
+                      },
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.person,
                 ),
               ),
               Spacer(),
@@ -510,7 +538,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                           data[index]['username'].toString(),
                           data[index]['totalProfit'].toString(),
                           // data[index]['totalProfit'].toString(),
-                          data[index]['createdAt'].toString()
+                          getvalidDate(data[index]['createdAt'].toString())
                         ],
                         // secondList: ['Jpy/USD', '40', '74'],
                         // thirdList: ['BTC/USD', '71', '17'],
