@@ -13,6 +13,7 @@ class DailyProfitLoss extends StatefulWidget {
 
 class _DailyProfitLossState extends State<DailyProfitLoss> {
   var body;
+
   Week1() async {
     var headers = {
       'Authorization':

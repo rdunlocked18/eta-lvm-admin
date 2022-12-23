@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,6 +13,7 @@ class RunningMonthlyTotalRoz extends StatefulWidget {
 }
 
 class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
+  String token = getToken();
   void initState() {
     super.initState();
     firstMonth();
@@ -22,8 +24,7 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
 
   firstMonth() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3AQ7p33kSwg8IVzTr3fbEo-oaKr52cVMu8.zQsNAcM6ufJoqrk8a3cWzDH4CEohj9gEtiB9NVG0lqw'
     };
@@ -51,8 +52,7 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
 
   secondMonth() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3AQ7p33kSwg8IVzTr3fbEo-oaKr52cVMu8.zQsNAcM6ufJoqrk8a3cWzDH4CEohj9gEtiB9NVG0lqw'
     };
@@ -80,8 +80,7 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
 
   thirdMonth() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3AtKcv23ZHCe6Nk8izfMWwJNAWbQYvnrz5.rdTp%2BbXg3ZFiMsku7QzzOwDkb2z0dNcaLfWM4O1H5Kk'
     };
@@ -109,8 +108,7 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
 
   forthMonth() async {
     var headers = {
-      'Authorization':
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0',
+      'Authorization': token,
       'Cookie':
           'connect.sid=s%3ANlzlMBHmFOANCC5NVC4JOyQeSWDSG4AR.oUIup2SRTKHvZ1ZfH7ti%2BdWPWnpRRbVkVjwXDBBOgH0'
     };
@@ -219,6 +217,12 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
         ),
       ],
     );
+  }
+
+  static getToken() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    var token = mainPref.getString("token");
+    return token;
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:locked_wallet/common_widget/common_textfield.dart';
 import 'package:locked_wallet/screens/adminAuth/register.dart';
 import 'package:locked_wallet/screens/admin_dashboard/admin_dashboard.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
@@ -40,11 +41,13 @@ class _AdminLoginState extends State<AdminLogin> {
       var body = jsonDecode(res);
       var message = body['msg'];
       //  StaticInfo.token = body['token'];
+      print(body['token']);
 
       isLoad = false;
       setState(() {});
       print("my msg == $message");
-
+      SharedPreferences mainPref = await SharedPreferences.getInstance();
+      mainPref.setString('token', body['token']);
       Fluttertoast.showToast(
           msg: '$message',
           gravity: ToastGravity.SNACKBAR,
