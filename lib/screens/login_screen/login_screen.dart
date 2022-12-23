@@ -1,13 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:locked_wallet/common_widget/state_info.dart';
-import 'package:locked_wallet/screens/admin_dashboard/admin_dashboard.dart';
 import 'package:locked_wallet/screens/signup_screen/signup_screen.dart';
 import 'package:locked_wallet/screens/user_dashboard/user_dashboard.dart';
 import '../../common_widget/common_textfield.dart';
-import '../../common_widget/reusable_textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -28,8 +25,8 @@ class _LogInScreenState extends State<LogInScreen> {
     isLoad = true;
     setState(() {});
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request(
-        'POST', Uri.parse('https://api.lockedvaultenterprises.com/api/auth/signin'));
+    var request = http.Request('POST',
+        Uri.parse('https://api.lockedvaultenterprises.com/api/auth/signin'));
     request.body =
         json.encode({"email": email.text, "password": password.text});
     request.headers.addAll(headers);
@@ -41,7 +38,7 @@ class _LogInScreenState extends State<LogInScreen> {
       var res = await response.stream.bytesToString();
       var body = jsonDecode(res);
       var message = body['msg'];
-       StaticInfo.token = body['token'];
+      StaticInfo.token = body['token'];
 
       isLoad = false;
       setState(() {});
@@ -90,6 +87,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     if (val!.isEmpty) {
                       return 'This is required field';
                     }
+                    return null;
                   }),
                   const SizedBox(
                     height: 14,
@@ -107,6 +105,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     if (val!.isEmpty) {
                       return 'This is required field';
                     }
+                    return null;
                   }),
                   //remember me
                   Align(
@@ -130,10 +129,9 @@ class _LogInScreenState extends State<LogInScreen> {
                           height: 50,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                primary: Color(0xFF0C331F)),
+                                backgroundColor: Color(0xFF0C331F)),
                             onPressed: () {
-                              if (formKey.currentState!.validate())
-                              {
+                              if (formKey.currentState!.validate()) {
                                 loginUser();
                               }
                             },

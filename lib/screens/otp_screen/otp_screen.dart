@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../common_widget/otp_text_field.dart';
 import '../admin_dashboard/admin_dashboard.dart';
-import '../login_screen/login_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({Key? key}) : super(key: key);
@@ -34,54 +32,64 @@ class _OtpScreenState extends State<OtpScreen> {
                     children: [
                       OtpTextField(
                         keyboardType: TextInputType.number,
-                        onChanged: (v){
-                          int value = int.parse(v);
+                        onChanged: (v) {
+                          // int value = int.parse(v);
                           if (v.length == 1) {
                             FocusScope.of(context).nextFocus();
                           }
                         },
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       OtpTextField(
                         keyboardType: TextInputType.number,
-                        onChanged: (v){
-                          int value = int.parse(v);
+                        onChanged: (v) {
+                          // int value = int.parse(v);
                           if (v.length == 1) {
                             FocusScope.of(context).nextFocus();
                           }
                         },
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       OtpTextField(
                         keyboardType: TextInputType.number,
-                        onChanged: (v){
-                          int value = int.parse(v);
+                        onChanged: (v) {
+                          // int value = int.parse(v);
                           if (v.length == 1) {
                             FocusScope.of(context).nextFocus();
                           }
                         },
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       OtpTextField(
                         keyboardType: TextInputType.number,
-                        onChanged: (v){
-                          int value = int.parse(v);
+                        onChanged: (v) {
+                          //int value = int.parse(v);
                           if (v.length == 1) {
                             FocusScope.of(context).nextFocus();
                           }
                         },
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                       OtpTextField(
                         keyboardType: TextInputType.number,
-                        onChanged: (v){
-                          int value = int.parse(v);
+                        onChanged: (v) {
+                          //int value = int.parse(v);
                           if (v.length == 1) {
                             FocusScope.of(context).nextFocus();
                           }
                         },
                       ),
-                      SizedBox(width: 20,),
+                      SizedBox(
+                        width: 20,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -91,12 +99,15 @@ class _OtpScreenState extends State<OtpScreen> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: Color(0xFF0C331F)),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF0C331F)),
                       onPressed: () {
-
-                        Navigator.push(context, MaterialPageRoute(builder: (_){
-                          return AdminDashBoard();
-                        }),);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) {
+                            return AdminDashBoard();
+                          }),
+                        );
                       },
                       child: Text("Verify"),
                     ),
@@ -113,5 +124,3 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 }
-
-

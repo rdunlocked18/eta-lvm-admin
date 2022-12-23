@@ -1,15 +1,15 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:locked_wallet/common_widget/state_info.dart';
 import 'package:locked_wallet/screens/admin_dashboard/admin_all_users_model/admin_all_users_model.dart';
-import 'package:locked_wallet/screens/admin_dashboard/admin_dashboard.dart';
-import 'package:locked_wallet/screens/user_dashboard/user_dashboard.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../common_widget/reusable_tableRow.dart';
 import 'package:http/http.dart' as http;
+
+import '../../user_dashboard/user_dashboard.dart';
 
 class DashBoardWithDrawContract extends StatefulWidget {
   const DashBoardWithDrawContract({Key? key}) : super(key: key);
@@ -54,9 +54,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
       for (int i = 0; i < message.length; i++) {
         UserModel getList = UserModel.fromJson(message[i]);
         list.add(getList);
-        setState(() {
-
-        });
+        setState(() {});
       }
     } else {
       print(response.reasonPhrase);
@@ -64,7 +62,10 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   }
 
   syncDash() async {
-    var headers = {'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0'};
+    var headers = {
+      'Authorization':
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJpcGluMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MTE4MjI1MX0.oqI_vc868nkJ24CeCtLXcyrxnJW3QM15cxFsdOmrFf0'
+    };
     var request = http.Request(
         'GET', Uri.parse('http://3.109.216.76:30111/api/user/getdashboard'));
     request.body = '''''';
@@ -76,41 +77,39 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
       var res = await response.stream.bytesToString();
       var body = jsonDecode(res);
       sync = body['data'];
-      setState(() {
-
-      });
+      setState(() {});
       // print('Sync is =$sync');
     } else {
       print(response.reasonPhrase);
     }
   }
+
   var data = [];
-  getData()async{
+  getData() async {
     var headers = {
-      'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkaXRpMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MDM0MTY4OH0.BjE1w14UkKa8fjkq7cf5rxd1P9lQUqEXi4qnmSuDj1w',
-      'Cookie': 'connect.sid=s%3AmBcOuoyugB54QXZqpWGQQbK88si9NELb.HBHNqX4GA599IDUwztdjItc%2B6yrnEzELzfKGnwRfu8Q'
+      'Authorization':
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkaXRpMTIzNEB0ZXN0LmNvbSIsImlhdCI6MTY3MDM0MTY4OH0.BjE1w14UkKa8fjkq7cf5rxd1P9lQUqEXi4qnmSuDj1w',
+      'Cookie':
+          'connect.sid=s%3AmBcOuoyugB54QXZqpWGQQbK88si9NELb.HBHNqX4GA599IDUwztdjItc%2B6yrnEzELzfKGnwRfu8Q'
     };
-    var request = http.Request('GET', Uri.parse('https://api.lockedvaultenterprises.com/api/admin/getallusers'));
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'https://api.lockedvaultenterprises.com/api/admin/getallusers'));
 
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-
       var res = await response.stream.bytesToString();
       var body = jsonDecode(res);
-      data= body['data'];
-      setState(() {
-
-      });
+      data = body['data'];
+      setState(() {});
       print(data);
+    } else {
+      print(response.reasonPhrase);
     }
-    else {
-    print(response.reasonPhrase);
-    }
-
-
   }
 
   @override
@@ -247,18 +246,18 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                 ),
               ),
               Spacer(),
-              // InkWell(
-              //     onTap: () {
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (_) {
-              //             return UserDashboard();
-              //           },
-              //         ),
-              //       );
-              //     },
-              //     child: Icon(Icons.menu)),
+              InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return UserDashboard();
+                        },
+                      ),
+                    );
+                  },
+                  child: Icon(Icons.menu)),
               SizedBox(
                 width: 10,
               )
@@ -309,228 +308,229 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
             height: 30,
           ),
           //Buttons
-         
+
           FutureBuilder(
-                future: syncDash(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.data != null || sync != null) {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        itemCount: sync.length,
-                        itemBuilder: (context, index) {
-                         // sync[index]['positions'][index]['openPrice'];
-                          return GestureDetector(
-                            onTap: (){
-
-                              getData();
-                            },
-                            child: Column(
-                              children: [
-
-                                               Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(color: Colors.black)),
-                                        padding: EdgeInsets.symmetric(vertical: 20),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              "Balance",
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              sync[index]['balance'].toString(),
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
+              future: syncDash(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.data != null || sync != null) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      itemCount: sync.length,
+                      itemBuilder: (context, index) {
+                        // sync[index]['positions'][index]['openPrice'];
+                        return GestureDetector(
+                          onTap: () {
+                            getData();
+                          },
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "Balance",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            sync[index]['balance'].toString(),
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(color: Colors.black)),
-                                        padding: EdgeInsets.symmetric(vertical: 20),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              "Equity",
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              sync[index]['equity'].toString(),
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "Equity",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            sync[index]['equity'].toString(),
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                // Buttons
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(color: Colors.black)),
-                                        padding: EdgeInsets.symmetric(vertical: 20),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              "Net Path",
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                             sync[index]['margin'].toString(),
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              // Buttons
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "Net Path",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            sync[index]['margin'].toString(),
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(color: Colors.black)),
-                                        padding: EdgeInsets.symmetric(vertical: 20),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              "Profit",
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                          sync[index]['equity'].toString(),
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "Profit",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            sync[index]['equity'].toString(),
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                }),
-          
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
 
           SizedBox(
             height: 20,
           ),
 
-             ListView.builder(
-               shrinkWrap: true,
-               itemCount: data.length,
-                 itemBuilder: (contex,index){
-                   // var date=DateTime(int.parse(list[index].createDate.toString()));
-                   // print(date);
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: data.length,
+              itemBuilder: (contex, index) {
+                // var date=DateTime(int.parse(list[index].createDate.toString()));
+                // print(date);
 
-
-                     // var f = DateFormat('E, d MMM yyyy HH:mm:ss');
-                     // var date = f.format(DateFormat(TimeOfDay.fromDateTime()).toUtc()) + " GMT";
-                   //  print(date);
-               return GestureDetector(
-                 onTap: (){
-                   print(
-                       list[index].createDate.toString() ?? ""
-                   );
-
-                 },
-                 child: Column(
-                   children: [
-                     CustomTable(
-
-
-                 // heading: ['Trades', 'P/Ps', 'Time'],
-                       firstList:
-                       [
-                         data[index]['username'].toString(),
-                         data[index]['totalProfit'].toString(),
-                        // data[index]['totalProfit'].toString(),
-                         data[index]['createdAt'].toString()
-                       ],
-                       // secondList: ['Jpy/USD', '40', '74'],
-                       // thirdList: ['BTC/USD', '71', '17'],
-                       // fourthList: ['XUA/USD', '67', '11']
-                     ),
-
-                   ],
-                 ),
-               );
-               //   Column(children: [
-               //   Row(
-               //     children: [
-               //      Column(children: [
-               //        Text(list[index].username ?? "null"),
-               //        SizedBox(height: 2,),
-               //        Divider(color: Colors.grey,)
-               //      ],)
-               //     ],
-               //   ),
-               // ],);
-             }),
+                // var f = DateFormat('E, d MMM yyyy HH:mm:ss');
+                // var date = f.format(DateFormat(TimeOfDay.fromDateTime()).toUtc()) + " GMT";
+                //  print(date);
+                return GestureDetector(
+                  onTap: () {
+                    print(list[index].createDate.toString());
+                  },
+                  child: Column(
+                    children: [
+                      CustomTable(
+                        // heading: ['Trades', 'P/Ps', 'Time'],
+                        firstList: [
+                          data[index]['username'].toString(),
+                          data[index]['totalProfit'].toString(),
+                          // data[index]['totalProfit'].toString(),
+                          data[index]['createdAt'].toString()
+                        ],
+                        // secondList: ['Jpy/USD', '40', '74'],
+                        // thirdList: ['BTC/USD', '71', '17'],
+                        // fourthList: ['XUA/USD', '67', '11']
+                      ),
+                    ],
+                  ),
+                );
+                //   Column(children: [
+                //   Row(
+                //     children: [
+                //      Column(children: [
+                //        Text(list[index].username ?? "null"),
+                //        SizedBox(height: 2,),
+                //        Divider(color: Colors.grey,)
+                //      ],)
+                //     ],
+                //   ),
+                // ],);
+              }),
 
           // CustomTable(
           //     heading: ['Trades', 'P/Ps', 'Time'],
@@ -544,7 +544,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   }
 
   Table CustomTable({
-   // required List<String> heading,
+    // required List<String> heading,
     required List<String> firstList,
     // required List<String> secondList,
     // required List<String> thirdList,
@@ -556,7 +556,6 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
         0: FractionColumnWidth(0.5),
         1: FractionColumnWidth(0.15),
         2: FractionColumnWidth(0.35),
-
       },
       children: [
         //ReusableTableRow(heading),

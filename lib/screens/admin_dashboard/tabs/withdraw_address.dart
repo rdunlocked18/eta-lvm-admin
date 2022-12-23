@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WithdrawAddress extends StatefulWidget {
@@ -109,11 +108,10 @@ class _WithdrawAddressState extends State<WithdrawAddress> {
           width: double.infinity,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            border: Border.all(
-              color: Color(0xFF0C331F),
-            ),
-            borderRadius: BorderRadius.circular(10)
-          ),
+              border: Border.all(
+                color: Color(0xFF0C331F),
+              ),
+              borderRadius: BorderRadius.circular(10)),
           child: Text(
             "BTC Address",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
@@ -130,8 +128,7 @@ class _WithdrawAddressState extends State<WithdrawAddress> {
               border: Border.all(
                 color: Color(0xFF0C331F),
               ),
-              borderRadius: BorderRadius.circular(10)
-          ),
+              borderRadius: BorderRadius.circular(10)),
           child: Text(
             "BTC Address CONFIRM",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
@@ -144,9 +141,8 @@ class _WithdrawAddressState extends State<WithdrawAddress> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: Color(0xFF0C331F)),
-            onPressed: () {
-            },
+            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0C331F)),
+            onPressed: () {},
             child: Text("Save"),
           ),
         ),

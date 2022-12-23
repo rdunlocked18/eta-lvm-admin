@@ -25,7 +25,9 @@ class _AdminLoginState extends State<AdminLogin> {
     setState(() {});
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request(
-        'POST', Uri.parse('https://api.lockedvaultenterprises.com/api/auth/admin/signin'));
+        'POST',
+        Uri.parse(
+            'https://api.lockedvaultenterprises.com/api/auth/admin/signin'));
     request.body =
         json.encode({"email": email.text, "password": password.text});
     request.headers.addAll(headers);
@@ -86,6 +88,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     if (val!.isEmpty) {
                       return 'This is required field';
                     }
+                    return null;
                   }),
                   const SizedBox(
                     height: 14,
@@ -103,6 +106,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     if (val!.isEmpty) {
                       return 'This is required field';
                     }
+                    return null;
                   }),
                   //remember me
                   Align(
@@ -126,10 +130,9 @@ class _AdminLoginState extends State<AdminLogin> {
                           height: 50,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                primary: Color(0xFF0C331F)),
+                                backgroundColor: Color(0xFF0C331F)),
                             onPressed: () {
-                              if (formKey.currentState!.validate())
-                              {
+                              if (formKey.currentState!.validate()) {
                                 AdminloginUser();
                               }
                             },

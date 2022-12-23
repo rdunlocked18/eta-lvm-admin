@@ -32,7 +32,8 @@ class LandingPage extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Color(0xFF0C331F)),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF0C331F)),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -51,7 +52,8 @@ class LandingPage extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Color(0xFF0C331F)),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF0C331F)),
                     onPressed: () {
                       Navigator.push(
                         context,
