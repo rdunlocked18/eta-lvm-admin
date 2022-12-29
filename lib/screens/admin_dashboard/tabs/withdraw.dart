@@ -81,47 +81,60 @@ class _withdrawState extends State<withdraw> {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: 50,),
-                    Text("75%",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600,color: Colors.white),),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    Text(
+                      "75%",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
                     Spacer(),
                     Column(
                       children: [
                         InkWell(
-                          onTap: (){},
+                          onTap: () {},
                           child: Container(
                             height: 30,
                             width: 50,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(10),
-                              ),
-                              border: Border.all(color: Colors.white)
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                ),
+                                border: Border.all(color: Colors.white)),
+                            child: Icon(
+                              Icons.arrow_drop_up,
+                              color: Colors.white,
                             ),
-                            child: Icon(Icons.arrow_drop_up,color: Colors.white,),
                           ),
                         ),
                         InkWell(
-                          onTap: (){},
+                          onTap: () {},
                           child: Container(
                             height: 30,
                             width: 50,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(10),
-                              ),
-                              border: Border.all(color: Colors.white)
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10),
+                                ),
+                                border: Border.all(color: Colors.white)),
+                            child: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.white,
                             ),
-                            child: Icon(Icons.arrow_drop_down,color: Colors.white,),
                           ),
                         ),
                       ],
                     )
                   ],
                 ),
-
               ),
             ),
-            SizedBox(width: 50,),
+            SizedBox(
+              width: 50,
+            ),
             Expanded(
               child: Container(
                 height: 60,
@@ -132,13 +145,21 @@ class _withdrawState extends State<withdraw> {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: 50,),
-                    Text("75%",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600,color: Colors.white),),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    Text(
+                      "75%",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
                     Spacer(),
                     Column(
                       children: [
                         InkWell(
-                          onTap: (){},
+                          onTap: () {},
                           child: Container(
                             height: 30,
                             width: 50,
@@ -146,13 +167,15 @@ class _withdrawState extends State<withdraw> {
                                 borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(10),
                                 ),
-                                border: Border.all(color: Colors.white)
+                                border: Border.all(color: Colors.white)),
+                            child: Icon(
+                              Icons.arrow_drop_up,
+                              color: Colors.white,
                             ),
-                            child: Icon(Icons.arrow_drop_up,color: Colors.white,),
                           ),
                         ),
                         InkWell(
-                          onTap: (){},
+                          onTap: () {},
                           child: Container(
                             height: 30,
                             width: 50,
@@ -160,16 +183,17 @@ class _withdrawState extends State<withdraw> {
                                 borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(10),
                                 ),
-                                border: Border.all(color: Colors.white)
+                                border: Border.all(color: Colors.white)),
+                            child: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.white,
                             ),
-                            child: Icon(Icons.arrow_drop_down,color: Colors.white,),
                           ),
                         ),
                       ],
                     )
                   ],
                 ),
-
               ),
             ),
           ],

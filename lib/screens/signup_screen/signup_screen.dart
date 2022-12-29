@@ -6,6 +6,7 @@ import 'package:locked_wallet/common_widget/common_textfield.dart';
 import '../login_screen/login_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import '../../../constants.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -28,8 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     isLoad = true;
     setState(() {});
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST',
-        Uri.parse('https://api.lockedvaultenterprises.com/api/auth/signup'));
+    var request = http.Request('POST', Uri.parse('$BASE_URL/api/auth/signup'));
     request.body = json.encode({
       "username": username.text,
       "email": email.text,

@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+
 class ReUsableTextField extends StatelessWidget {
-  final String ? hintText;
-  final TextInputType ? keyboardType;
-  final TextEditingController ? controller;
-  final IconData ? prefixIcon;
-  final Widget ? suffixIcon;
-  final bool ? obSecureText;
+  final String? hintText;
+  final TextInputType? keyboardType;
+  final TextEditingController? controller;
+  final IconData? prefixIcon;
+  final Widget? suffixIcon;
+  final bool? obSecureText;
   const ReUsableTextField({
-    Key? key, this.hintText, this.keyboardType, this.controller, this.prefixIcon, this.suffixIcon, this.obSecureText = false,
+    Key? key,
+    this.hintText,
+    this.keyboardType,
+    this.controller,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.obSecureText = false,
   }) : super(key: key);
 
   @override

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'add_mt_details.dart';
 import 'admin_dashboard/admin_all_users_model/admin_all_users_model.dart';
+import '../../../constants.dart';
 
 class UserListingScreen extends StatefulWidget {
   const UserListingScreen({super.key});
@@ -29,10 +30,8 @@ class _UserListingScreenState extends State<UserListingScreen> {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? "NULL";
     var headers = {'Authorization': token};
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-            'https://api.lockedvaultenterprises.com/api/admin/getallusers'));
+    var request =
+        http.Request('GET', Uri.parse('$BASE_URL/api/admin/getallusers'));
 
     request.headers.addAll(headers);
 

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class OtpTextField extends StatelessWidget {
-  final Function(String v) ? onChanged;
-  final TextInputType ? keyboardType;
+  final Function(String v)? onChanged;
+  final TextInputType? keyboardType;
 
   const OtpTextField({
-    Key? key, this.onChanged, this.keyboardType,
+    Key? key,
+    this.onChanged,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
@@ -15,7 +17,6 @@ class OtpTextField extends StatelessWidget {
       height: 60,
       width: 60,
       child: TextField(
-
         keyboardType: keyboardType,
         onChanged: onChanged,
         inputFormatters: [
@@ -24,12 +25,11 @@ class OtpTextField extends StatelessWidget {
         ],
         decoration: InputDecoration(
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10),
             ),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-            )
-        ),
+              borderRadius: BorderRadius.circular(10),
+            )),
       ),
     );
   }

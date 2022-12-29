@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:locked_wallet/common_widget/common_textfield.dart';
 import 'package:locked_wallet/screens/adminAuth/login.dart';
 import 'package:http/http.dart' as http;
+import '../../../constants.dart';
 
 class AdminRegister extends StatefulWidget {
   const AdminRegister({super.key});
@@ -25,10 +26,8 @@ class _AdminRegisterState extends State<AdminRegister> {
     isLoad = true;
     setState(() {});
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            'https://api.lockedvaultenterprises.com/api/auth/admin/signup'));
+    var request =
+        http.Request('POST', Uri.parse('$BASE_URL/api/auth/admin/signup'));
     request.body = json.encode({
       "username": username.text,
       "email": email.text,

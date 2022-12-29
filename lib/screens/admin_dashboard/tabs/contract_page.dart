@@ -14,7 +14,7 @@ class _ContractPageState extends State<ContractPage> {
     'item 3',
     'item 4',
   ];
-  String ? _initialValue;
+  String? _initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -33,21 +33,30 @@ class _ContractPageState extends State<ContractPage> {
           padding: EdgeInsets.all(10),
           height: 60,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Color(0xFF0C331F),width: 1)
-          ),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Color(0xFF0C331F), width: 1)),
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
               value: _initialValue,
               borderRadius: BorderRadius.circular(10),
-              style: TextStyle(fontWeight: FontWeight.w800,fontSize: 18,),
-              hint: Text("General",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 18),),
-              items: _items.map((e) => DropdownMenuItem<String>(child: Text(e),value: e,)).toList(),
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 18,
+              ),
+              hint: Text(
+                "General",
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
+              ),
+              items: _items
+                  .map((e) => DropdownMenuItem<String>(
+                        child: Text(e),
+                        value: e,
+                      ))
+                  .toList(),
               onChanged: (v) {
                 setState(() {
                   _initialValue = v!;
                 });
-
               },
             ),
           ),
@@ -66,18 +75,11 @@ class _ContractPageState extends State<ContractPage> {
           maxLines: 6,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide( color: Color(0xFF0C331F),
-                  width: 1
-              )
-            ),
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color(0xFF0C331F), width: 1)),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                color: Color(0xFF0C331F),
-                width: 1
-              )
-            ),
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color(0xFF0C331F), width: 1)),
           ),
         )
       ],

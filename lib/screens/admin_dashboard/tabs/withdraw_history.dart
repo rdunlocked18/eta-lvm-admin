@@ -9,7 +9,6 @@ class WithdrawHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         Table(
           border: TableBorder.all(),
           columnWidths: {
@@ -20,9 +19,11 @@ class WithdrawHistory extends StatelessWidget {
             4: FractionColumnWidth(0.25),
           },
           children: [
-            ReusableTableRow(['WithDraw Methode','Amount','Date','Time'],isHeader: true),
-            ReusableTableRow(['Btc Wallet','400','1/12/2022', '12:00'],),
-
+            ReusableTableRow(['WithDraw Methode', 'Amount', 'Date', 'Time'],
+                isHeader: true),
+            ReusableTableRow(
+              ['Btc Wallet', '400', '1/12/2022', '12:00'],
+            ),
           ],
         )
       ],

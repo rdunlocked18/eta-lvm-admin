@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:locked_wallet/screens/user_dashboard/tabs/running_monthl_total_roz.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-
 class RozByWeek extends StatelessWidget {
   const RozByWeek({Key? key}) : super(key: key);
 
@@ -12,10 +11,7 @@ class RozByWeek extends StatelessWidget {
       children: [
         Container(
           child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(
-                  title: AxisTitle(text: 'Dates')
-              ),
-
+              primaryXAxis: CategoryAxis(title: AxisTitle(text: 'Dates')),
               primaryYAxis: NumericAxis(title: AxisTitle(text: 'Percentage')),
               // Enable legend
               legend: Legend(isVisible: true),
@@ -56,8 +52,7 @@ class RozByWeek extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xFF0C331F))
-              ),
+                  border: Border.all(color: Color(0xFF0C331F))),
               child: Text(
                 "30%",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

@@ -10,6 +10,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../common_widget/reusable_tableRow.dart';
 import 'package:http/http.dart' as http;
+import '../../../constants.dart';
 
 import '../../user_dashboard/user_dashboard.dart';
 import '../../user_listing_screen.dart';
@@ -47,10 +48,8 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
     var headers = {
       'Authorization': token ?? '',
     };
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-            'https://api.lockedvaultenterprises.com/api/admin/getallusers'));
+    var request =
+        http.Request('GET', Uri.parse('$BASE_URL/api/admin/getallusers'));
 
     request.headers.addAll(headers);
 
@@ -117,10 +116,8 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
     var headers = {
       'Authorization': token ?? '',
     };
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-            'https://api.lockedvaultenterprises.com/api/admin/getallusers'));
+    var request =
+        http.Request('GET', Uri.parse('$BASE_URL/api/admin/getallusers'));
 
     request.headers.addAll(headers);
 
@@ -156,6 +153,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                   fit: BoxFit.contain,
                 ),
               ),
+              Spacer(),
               InkWell(
                 onTap: () async {
                   await showDialog(
@@ -286,16 +284,8 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                     ),
                   );
                 },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.person,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text("All Users")
-                  ],
+                child: Icon(
+                  Icons.person,
                 ),
               ),
               Spacer(),

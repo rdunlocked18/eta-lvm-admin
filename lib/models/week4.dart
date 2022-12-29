@@ -1,14 +1,10 @@
-
-
-class WeekFour{
+class WeekFour {
   String? totalProfit;
 
   WeekFour({this.totalProfit});
 
-
   WeekFour.fromJson(Map<String, dynamic> json) {
     totalProfit = json['totalProfit'];
-
   }
 
   Map<String, dynamic> toJson() {

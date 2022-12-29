@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common_widget/common_textfield.dart';
 import '../common_widget/state_info.dart';
+import '../../../constants.dart';
 import 'package:http/http.dart' as http;
 
 class AddUserMtDetails extends StatefulWidget {
@@ -23,12 +24,12 @@ class AddUserMtDetails extends StatefulWidget {
 class _AddUserMtDetailsState extends State<AddUserMtDetails> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.user.metatrader?.id != null) {
       loginIdController.text = '${widget.user.metatrader?.serverId}';
       passwordController.text = '${widget.user.metatrader?.serverPassword}';
       serverNameController.text = '${widget.user.metatrader?.serverName}';
+      accountIdController.text = '${widget.user.accountId}';
     }
   }
 
@@ -61,9 +62,7 @@ class _AddUserMtDetailsState extends State<AddUserMtDetails> {
       'Authorization': token
     };
     var request = http.Request(
-        'POST',
-        Uri.parse(
-            'https://api.lockedvaultenterprises.com/api/admin/user/mtdetail/create'));
+        'POST', Uri.parse('$BASE_URL/api/admin/user/mtdetail/create'));
     request.body = json.encode({
       "userId": "${user.id}",
       "serverId": loginIdController.text,
@@ -126,10 +125,8 @@ class _AddUserMtDetailsState extends State<AddUserMtDetails> {
       // 'Content-Type': 'application/json',
       'Authorization': token
     };
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            'https://api.lockedvaultenterprises.com/api/admin/meta/linkaccid'));
+    var request =
+        http.Request('POST', Uri.parse('$BASE_URL/api/admin/meta/linkaccid'));
     request.body = json.encode({
       "userId": "${user.id}",
       "accountId": accountIdController.text,

@@ -7,6 +7,7 @@ import 'package:locked_wallet/screens/adminAuth/register.dart';
 import 'package:locked_wallet/screens/admin_dashboard/admin_dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../constants.dart';
 
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
@@ -25,10 +26,8 @@ class _AdminLoginState extends State<AdminLogin> {
     isLoad = true;
     setState(() {});
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request(
-        'POST',
-        Uri.parse(
-            'https://api.lockedvaultenterprises.com/api/auth/admin/signin'));
+    var request =
+        http.Request('POST', Uri.parse('$BASE_URL/api/auth/admin/signin'));
     request.body =
         json.encode({"email": email.text, "password": password.text});
     request.headers.addAll(headers);
