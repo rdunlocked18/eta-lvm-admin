@@ -41,6 +41,8 @@ class SingleUserData {
   final String? createdAt;
   final String? updatedAt;
   final Metatrader? metatrader;
+  bool isSelected = false;
+  final int? totalProfit;
 
   SingleUserData({
     this.id,
@@ -52,6 +54,7 @@ class SingleUserData {
     this.createdAt,
     this.updatedAt,
     this.metatrader,
+    this.totalProfit,
   });
 
   SingleUserData copyWith({
@@ -64,6 +67,7 @@ class SingleUserData {
     String? createdAt,
     String? updatedAt,
     Metatrader? metatrader,
+    int? totalProfit,
   }) {
     return SingleUserData(
       id: id ?? this.id,
@@ -75,6 +79,7 @@ class SingleUserData {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       metatrader: metatrader ?? this.metatrader,
+      totalProfit: totalProfit ?? this.totalProfit,
     );
   }
 
@@ -89,7 +94,8 @@ class SingleUserData {
         updatedAt = json['updatedAt'] as String?,
         metatrader = (json['metatrader'] as Map<String, dynamic>?) != null
             ? Metatrader.fromJson(json['metatrader'] as Map<String, dynamic>)
-            : null;
+            : null,
+        totalProfit = json['totalProfit'] as int?;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -100,7 +106,8 @@ class SingleUserData {
         'accountId': accountId,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
-        'metatrader': metatrader?.toJson()
+        'metatrader': metatrader?.toJson(),
+        'totalProfit': totalProfit.toString(),
       };
 }
 

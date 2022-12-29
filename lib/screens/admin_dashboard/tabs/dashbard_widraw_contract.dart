@@ -41,25 +41,25 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   GetAllUsers() async {
     SharedPreferences mainPref = await SharedPreferences.getInstance();
     var token = mainPref.getString("token");
-
+    isLoading = true;
+    setState(() {});
+    print(token);
     var headers = {
       'Authorization': token ?? '',
     };
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://api.lockedvaultenterprises.com/api/admin/getallusers'));
+            'https://api.lockedvaultenterprises.com/api/admin/getallusers'));
 
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
-      // print(await response.stream.bytesToString());
       var res = await response.stream.bytesToString();
-
       var body = jsonDecode(res);
       message = body['data'];
+      print("MESSAGE IS $message");
       for (int i = 0; i < message.length; i++) {
         SingleUserData getList = SingleUserData.fromJson(message[i]);
         list.add(getList);
@@ -156,124 +156,124 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                   fit: BoxFit.contain,
                 ),
               ),
+              InkWell(
+                onTap: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (_) {
+                        return StatefulBuilder(
+                          builder: (BuildContext context,
+                              void Function(void Function()) setState) {
+                            return Dialog(
+                              backgroundColor: Colors.grey.shade200,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  children: [
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: ScrollPhysics(),
+                                        itemCount: list.length,
+                                        itemBuilder: (context, index) {
+                                          print(
+                                              list[index].username.toString());
+                                          return Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(list[index]
+                                                        .username
+                                                        .toString()),
+                                                  ),
+                                                  Checkbox(
+                                                    focusColor:
+                                                        const Color(0xFFFFC000),
+                                                    checkColor: Colors.black,
+                                                    activeColor:
+                                                        const Color(0xFFFFC000),
+                                                    value:
+                                                        list[index].isSelected,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        list[index].isSelected =
+                                                            !list[index]
+                                                                .isSelected;
+                                                        if (value == true)
+                                                          allUsers = false;
 
-              //DropDownButton
-              // InkWell(
-              //   onTap: () async {
-              //     await showDialog(
-              //         context: context,
-              //         builder: (_) {
-              //           return StatefulBuilder(
-              //             builder: (BuildContext context,
-              //                 void Function(void Function()) setState) {
-              //               return Dialog(
-              //                 backgroundColor: Colors.grey.shade200,
-              //                 shape: RoundedRectangleBorder(
-              //                   borderRadius: BorderRadius.circular(20),
-              //                 ),
-              //                 child: Padding(
-              //                   padding: const EdgeInsets.all(20.0),
-              //                   child: Column(
-              //                     children: [
-              //                       ListView.builder(
-              //                           shrinkWrap: true,
-              //                           physics: ScrollPhysics(),
-              //                           itemCount: list.length,
-              //                           itemBuilder: (context, index) {
-              //                             print(
-              //                                 list[index].username.toString());
-              //                             return Column(
-              //                               children: [
-              //                                 Row(
-              //                                   children: [
-              //                                     Expanded(
-              //                                       child: Text(list[index]
-              //                                           .username
-              //                                           .toString()),
-              //                                     ),
-              //                                     // Checkbox(
-              //                                     //   focusColor:
-              //                                     //       const Color(0xFFFFC000),
-              //                                     //   checkColor: Colors.black,
-              //                                     //   activeColor:
-              //                                     //       const Color(0xFFFFC000),
-              //                                     //   value:
-              //                                     //       list[index].isSelected!,
-              //                                     //   onChanged: (value) {
-              //                                     //     setState(() {
-              //                                     //       list[index].isSelected =
-              //                                     //           !list[index]
-              //                                     //               .isSelected!;
-
-              //                                     //       setState(() {});
-              //                                     //     });
-              //                                     //   },
-              //                                     // ),
-              //                                   ],
-              //                                 )
-              //                               ],
-              //                             );
-              //                           }),
-              //                       Spacer(),
-              //                       InkWell(
-              //                         onTap: () {
-              //                           Navigator.pop(context);
-              //                         },
-              //                         child: Container(
-              //                           padding: EdgeInsets.symmetric(
-              //                               horizontal: 10),
-              //                           width: 120,
-              //                           height: 60,
-              //                           alignment: Alignment.center,
-              //                           decoration: BoxDecoration(
-              //                               color: Color(0xFF0C331F),
-              //                               borderRadius:
-              //                                   BorderRadius.circular(10)),
-              //                           child: Text(
-              //                             "Submit",
-              //                             style: TextStyle(
-              //                               fontSize: 16,
-              //                               color: Colors.white,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ),
-              //                     ],
-              //                   ),
-              //                 ),
-              //               );
-              //             },
-              //           );
-              //         });
-              //     setState(() {});
-              //   },
-              //   child: Container(
-              //     padding: EdgeInsets.symmetric(horizontal: 10),
-              //     height: 30,
-              //     alignment: Alignment.center,
-              //     decoration: BoxDecoration(
-              //         color: Color(0xFF0C331F),
-              //         borderRadius: BorderRadius.circular(10)),
-              //     child: Row(
-              //       children: [
-              //         Text(
-              //           _initialValue,
-              //           style: TextStyle(
-              //             fontSize: 16,
-              //             color: Colors.white,
-              //           ),
-              //         ),
-              //         SizedBox(
-              //           width: 50,
-              //         ),
-              //         Icon(
-              //           Icons.keyboard_arrow_down,
-              //           color: Colors.white,
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
+                                                        setState(() {});
+                                                      });
+                                                    },
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          );
+                                        }),
+                                    Spacer(),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        width: 120,
+                                        height: 60,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFF0C331F),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Text(
+                                          "Submit",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      });
+                  setState(() {});
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: 30,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Color(0xFF0C331F),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      Text(
+                        _initialValue,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                ),
+              ),
               Spacer(),
               InkWell(
                 onTap: () {
@@ -537,9 +537,14 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
             height: 20,
           ),
 
+          CustomTable(
+              firstList: ['Account Name', 'P/Ps', 'Time'],
+              heading: [],
+              isHeader: true),
+
           ListView.builder(
               shrinkWrap: true,
-              itemCount: data.length,
+              itemCount: list.length,
               itemBuilder: (contex, index) {
                 // var date=DateTime(int.parse(list[index].createDate.toString()));
                 // print(date);
@@ -547,32 +552,35 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                 // var f = DateFormat('E, d MMM yyyy HH:mm:ss');
                 // var date = f.format(DateFormat(TimeOfDay.fromDateTime()).toUtc()) + " GMT";
                 //  print(date);
-                return GestureDetector(
-                  onTap: () {
-                    print(list[index].createdAt.toString());
-                  },
-                  child: isLoading
-                      ? Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : Column(
-                          children: [
-                            CustomTable(
-                              heading: ['Account Name', 'P/Ps', 'Time'],
-                              firstList: [
-                                data[index]['username'].toString(),
-                                data[index]['totalProfit'].toString(),
-                                // data[index]['totalProfit'].toString(),
-                                getvalidDate(
-                                    data[index]['createdAt'].toString())
-                              ],
-                              // secondList: ['Jpy/USD', '40', '74'],
-                              // thirdList: ['BTC/USD', '71', '17'],
-                              // fourthList: ['XUA/USD', '67', '11']
-                            ),
-                          ],
-                        ),
-                );
+                if (allUsers == true || list[index].isSelected) {
+                  return GestureDetector(
+                    onTap: () {
+                      print(list[index].createdAt.toString());
+                    },
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Column(
+                            children: [
+                              CustomTable(
+                                heading: ['Account Name', 'P/Ps', 'Time'],
+                                firstList: [
+                                  list[index].username ?? "NO USERNAME",
+                                  list[index].totalProfit.toString(),
+
+                                  // data[index]['totalProfit'].toString(),
+                                  getvalidDate(list[index].createdAt.toString())
+                                ],
+                                // secondList: ['Jpy/USD', '40', '74'],
+                                // thirdList: ['BTC/USD', '71', '17'],
+                                // fourthList: ['XUA/USD', '67', '11']
+                              ),
+                            ],
+                          ),
+                  );
+                }
+                return Container();
                 //   Column(children: [
                 //   Row(
                 //     children: [
@@ -600,6 +608,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
   Table CustomTable({
     required List<String> heading,
     required List<String> firstList,
+    bool isHeader = false,
     // required List<String> secondList,
     // required List<String> thirdList,
     // required List<String> fourthList,
@@ -612,20 +621,12 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
         2: FractionColumnWidth(0.35),
       },
       children: [
-        //ReusableTableRow(heading),
-        ReusableTableRow(firstList),
+        ReusableTableRow(firstList, isHeader: isHeader),
         // ReusableTableRow(secondList),
         // ReusableTableRow(thirdList),
         // ReusableTableRow(fourthList),
       ],
     );
-  }
-
-  static Future<String> getToken() async {
-    SharedPreferences mainPref = await SharedPreferences.getInstance();
-    var token = mainPref.getString("token");
-    print(token);
-    return token ?? '';
   }
 }
 
