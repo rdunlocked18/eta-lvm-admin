@@ -14,7 +14,6 @@ class RunningMonthlyTotalRoz extends StatefulWidget {
 }
 
 class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
-  String token = getToken();
   void initState() {
     super.initState();
     firstMonth();
@@ -24,6 +23,8 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
   }
 
   firstMonth() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    String token = mainPref.getString("token") ?? "";
     var headers = {
       'Authorization': token,
       'Cookie':
@@ -50,6 +51,8 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
   }
 
   secondMonth() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    String token = mainPref.getString("token") ?? "";
     var headers = {
       'Authorization': token,
       'Cookie':
@@ -76,6 +79,8 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
   }
 
   thirdMonth() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    String token = mainPref.getString("token") ?? "";
     var headers = {
       'Authorization': token,
       'Cookie':
@@ -102,6 +107,8 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
   }
 
   forthMonth() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    String token = mainPref.getString("token") ?? "";
     var headers = {
       'Authorization': token,
       'Cookie':
@@ -210,12 +217,6 @@ class _RunningMonthlyTotalRozState extends State<RunningMonthlyTotalRoz> {
         ),
       ],
     );
-  }
-
-  static getToken() async {
-    SharedPreferences mainPref = await SharedPreferences.getInstance();
-    var token = mainPref.getString("token");
-    return token;
   }
 }
 
