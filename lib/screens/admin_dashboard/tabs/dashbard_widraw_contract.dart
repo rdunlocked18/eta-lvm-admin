@@ -12,7 +12,6 @@ import '../../../common_widget/reusable_tableRow.dart';
 import 'package:http/http.dart' as http;
 import '../../../constants.dart';
 
-import '../../adminAuth/login.dart';
 import '../../user_dashboard/user_dashboard.dart';
 import '../../user_listing_screen.dart';
 
@@ -289,12 +288,6 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
                   Icons.person,
                 ),
               ),
-              Spacer(),
-              InkWell(
-                  onTap: () {
-                    Logout(context);
-                  },
-                  child: Icon(Icons.logout)),
               Spacer(),
               InkWell(
                   onTap: () {
@@ -624,39 +617,6 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
         // ReusableTableRow(fourthList),
       ],
     );
-  }
-
-  void Logout(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Logout"),
-            content: Text("Are you sure?"),
-            actions: [
-              TextButton(
-                child: Text("Cancel"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton(
-                child: Text("Continue"),
-                onPressed: () async {
-                  SharedPreferences mainPref =
-                      await SharedPreferences.getInstance();
-                  mainPref.clear();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => AdminLogin()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-              ),
-            ],
-          );
-          ;
-        });
   }
 }
 
