@@ -31,6 +31,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
 
   var message = [];
   var sync = [];
+  int? netProfit = 0;
   List<SingleUserData> list = [];
   UserModel? select;
   void initState() {
@@ -39,7 +40,8 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
     getData();
   }
 
-  GetAllUsers() async {
+  Future<void> GetAllUsers() async {
+    netProfit = 0;
     SharedPreferences mainPref = await SharedPreferences.getInstance();
     var token = mainPref.getString("token");
     isLoading = true;
@@ -62,8 +64,11 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
       for (int i = 0; i < message.length; i++) {
         SingleUserData getList = SingleUserData.fromJson(message[i]);
         list.add(getList);
+        netProfit = netProfit ?? 0 + getList.totalProfit!;
         setState(() {});
       }
+      print(netProfit);
+      getChartData();
     } else {
       print(response.reasonPhrase);
     }
@@ -88,7 +93,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://api.lockedvaultenterprises.com/api/user/getdashboard'));
+            'https://api.lockedvaultenterprises.com/api/user/getdashboard'));
 
     request.headers.addAll(headers);
 
@@ -99,7 +104,7 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
       var body = jsonDecode(res);
       sync = body['data'];
       setState(() {});
-      // print('Sync is =$sync');
+      print('Sync is =$sync');
     } else {
       print(response.reasonPhrase);
     }
@@ -136,8 +141,58 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
     }
   }
 
+  void mainBB() async {
+    SharedPreferences mainPref = await SharedPreferences.getInstance();
+    var token = mainPref.getString("token");
+    isLoading = true;
+    setState(() {});
+    print(token);
+    var headers = {
+      'Authorization': token ?? '',
+    };
+    var request =
+        http.Request('GET', Uri.parse('$BASE_URL/api/admin/getallusers'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var res = await response.stream.bytesToString();
+      var body = jsonDecode(res);
+      data = body['data'];
+      List<Map<String, dynamic>> users =
+          body['data'] as List<Map<String, dynamic>>;
+      for (int i = 0; i <= users.length; i++) {
+        print('${users[i]['dashboard']['balance']}');
+      }
+      //List<String> sd = [];
+      isLoading = false;
+      setState(() {});
+      print(data);
+    } else {
+      isLoading = false;
+      print(response.reasonPhrase);
+    }
+  }
+
+  List<ProfitLoss> psList = [];
+  void getChartData() async {
+    psList = [];
+    print(list);
+
+    list.forEach((element) {
+      psList.add(ProfitLoss(
+          '${element.username}', element.totalProfit?.toDouble() ?? 0));
+    });
+
+    print("LIST $psList");
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    //mainBB();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -315,29 +370,12 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
             height: MediaQuery.of(context).size.height * .5,
             child: SfCartesianChart(
                 palette: [Color(0xFF0C331F)],
-                primaryXAxis: CategoryAxis(title: AxisTitle(text: 'Days')),
+                primaryXAxis: CategoryAxis(title: AxisTitle(text: 'Investors')),
                 primaryYAxis:
                     NumericAxis(title: AxisTitle(text: 'Profit / Loss')),
                 series: <ChartSeries>[
                   ColumnSeries<ProfitLoss, String>(
-                      dataSource: <ProfitLoss>[
-                        ProfitLoss('1', 89),
-                        ProfitLoss('2', 280),
-                        ProfitLoss('3', 54),
-                        ProfitLoss('4', 320),
-                        ProfitLoss('5', 400),
-                        ProfitLoss('6', -190),
-                        ProfitLoss('7', 200),
-                        ProfitLoss('8', -111),
-                        ProfitLoss('9', 320),
-                        ProfitLoss('10', 240),
-                        ProfitLoss('11', 280),
-                        ProfitLoss('12', 900),
-                        ProfitLoss('13', -220),
-                        ProfitLoss('14', 400),
-                        ProfitLoss('15', -190),
-                        ProfitLoss('16', 600),
-                      ],
+                      dataSource: psList,
                       xValueMapper: (ProfitLoss sales, _) => sales.day,
                       yValueMapper: (ProfitLoss sales, _) => sales.profit,
                       dataLabelSettings: DataLabelSettings(isVisible: true))
@@ -348,181 +386,171 @@ class _DashBoardWithDrawContractState extends State<DashBoardWithDrawContract> {
           ),
           //Buttons
 
-          FutureBuilder(
-              future: syncDash(),
-              builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.data != null || sync != null) {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemCount: sync.length,
-                      itemBuilder: (context, index) {
-                        // sync[index]['positions'][index]['openPrice'];
-                        return GestureDetector(
-                          onTap: () {
-                            getData();
-                          },
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "Balance",
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            sync[index]['balance'].toString(),
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "Equity",
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            sync[index]['equity'].toString(),
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              // Buttons
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "Net Path",
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            sync[index]['margin'].toString(),
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "Profit",
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            sync[index]['equity'].toString(),
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+          Column(
+            children: [
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Container(
+              //         width: double.infinity,
+              //         decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(10),
+              //             border: Border.all(color: Colors.black)),
+              //         padding: EdgeInsets.symmetric(vertical: 20),
+              //         child: Column(
+              //           children: [
+              //             Text(
+              //               "Balance",
+              //               style: TextStyle(
+              //                   fontSize: 17,
+              //                   fontWeight: FontWeight.bold,
+              //                   color: Colors.black),
+              //             ),
+              //             SizedBox(
+              //               height: 10,
+              //             ),
+              //             Text(
+              //               "1",
+              //               style: TextStyle(
+              //                   fontSize: 17,
+              //                   fontWeight: FontWeight.w500,
+              //                   color: Colors.black),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       width: 20,
+              //     ),
+              //     Expanded(
+              //       child: Container(
+              //         width: double.infinity,
+              //         decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(10),
+              //             border: Border.all(color: Colors.black)),
+              //         padding: EdgeInsets.symmetric(vertical: 20),
+              //         child: Column(
+              //           children: [
+              //             Text(
+              //               "Equity",
+              //               style: TextStyle(
+              //                   fontSize: 17,
+              //                   fontWeight: FontWeight.bold,
+              //                   color: Colors.black),
+              //             ),
+              //             SizedBox(
+              //               height: 10,
+              //             ),
+              //             Text(
+              //               "1",
+              //               style: TextStyle(
+              //                   fontSize: 17,
+              //                   fontWeight: FontWeight.w500,
+              //                   color: Colors.black),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              SizedBox(
+                height: 10,
+              ),
+              // Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black)),
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Net Profit",
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
-                        );
-                      });
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              }),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "${netProfit}",
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black)),
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Investors",
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "${list.length}",
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )
 
+          // FutureBuilder(
+          //     future: syncDash(),
+          //     builder: (context, AsyncSnapshot snapshot) {
+          //       if (snapshot.data != null || sync != null) {
+          //         return ListView.builder(
+          //             shrinkWrap: true,
+          //             physics: ScrollPhysics(),
+          //             itemCount: sync.length,
+          //             itemBuilder: (context, index) {
+          //               // sync[index]['positions'][index]['openPrice'];
+          //               return GestureDetector(
+          //                 onTap: () {
+          //                   getData();
+          //                 },
+          //                 child: ,
+          //               );
+          //             });
+          //       } else {
+          //         return Center(child: CircularProgressIndicator());
+          //       }
+          //     }),
+          ,
           SizedBox(
             height: 20,
           ),
